@@ -19,12 +19,17 @@ void Level01::_ready() {
 }
 
 void Level01::OnPlayerShoot(godot::Vector2 pos, godot::Vector2 dir) {
-  auto* bullet = godot::Object::cast_to<Bullet>(bullet_scene_->instantiate());
+  auto* node = bullet_scene_->instantiate();
+  auto* bullet = godot::Object::cast_to<Bullet>(node);
   if (bullet) {
     bullet->Setup(pos, dir);
-  }
-  auto* bullets = get_node_or_null("Bullets");
-  if (bullets) {
-    bullets->add_child(bullet);
+    auto* bullets = get_node_or_null("Bullets");
+    if (bullets) {
+      bullets->add_child(bullet);
+    } else {
+      add_child(bullet);
+    }
+  } else if (node) {
+    node->queue_free();
   }
 }
