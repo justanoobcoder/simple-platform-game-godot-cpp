@@ -3,6 +3,7 @@
 
 #include <godot_cpp/classes/area2d.hpp>
 
+#include "godot_cpp/classes/node2d.hpp"
 #include "godot_cpp/classes/wrapped.hpp"
 #include "godot_cpp/variant/vector2.hpp"
 
@@ -15,6 +16,8 @@ class Bullet : public godot::Area2D {
   void _process(double delta) override;
 
   void Setup(godot::Vector2 pos, godot::Vector2 dir);
+
+  void OnHitDrone(godot::Node2D* body);
   void OnScreenExited();
 
  protected:

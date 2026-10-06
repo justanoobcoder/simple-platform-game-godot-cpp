@@ -7,6 +7,7 @@
 #include <godot_cpp/godot.hpp>
 
 #include "entities/bullet.hpp"
+#include "entities/drone.hpp"
 #include "entities/player.hpp"
 #include "levels/level_01.hpp"
 
@@ -19,6 +20,7 @@ void initialize_gdextension_types(ModuleInitializationLevel level) {  // NOLINT
   GDREGISTER_RUNTIME_CLASS(Level01);
   GDREGISTER_RUNTIME_CLASS(Player);
   GDREGISTER_RUNTIME_CLASS(Bullet);
+  GDREGISTER_RUNTIME_CLASS(Drone);
 }
 
 void uninitialize_gdextension_types(ModuleInitializationLevel level) {  // NOLINT

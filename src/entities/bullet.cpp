@@ -1,10 +1,13 @@
 #include "bullet.hpp"
 
+#include "entities/drone.hpp"
 #include "godot_cpp/classes/input.hpp"
+#include "godot_cpp/classes/node2d.hpp"
 #include "godot_cpp/classes/ref.hpp"
 #include "godot_cpp/classes/sprite2d.hpp"
 #include "godot_cpp/classes/tween.hpp"
 #include "godot_cpp/core/class_db.hpp"
+#include "godot_cpp/core/object.hpp"
 #include "godot_cpp/variant/callable.hpp"
 #include "godot_cpp/variant/callable_method_pointer.hpp"
 
@@ -22,6 +25,8 @@ void Bullet::_bind_methods() {
 }
 
 void Bullet::_ready() {
+  connect("body_entered", callable_mp(this, &Bullet::OnHitDrone));
+
   auto* notifier = get_node_or_null("VisibleOnScreenNotifier2D");
   if (notifier) {
     notifier->connect("screen_exited", callable_mp(this, &Bullet::OnScreenExited));
@@ -39,6 +44,14 @@ void Bullet::Setup(Vector2 pos, Vector2 dir) {
   set_position(pos + dir * 15);
   direction_ = dir;
   set_rotation(dir.angle());
+}
+
+void Bullet::OnHitDrone(godot::Node2D* body) {
+  auto* drone = godot::Object::cast_to<Drone>(body);
+  if (drone) {
+    drone->TakeDamage(direction_);
+  }
+  queue_free();
 }
 
 void Bullet::OnScreenExited() { queue_free(); }
