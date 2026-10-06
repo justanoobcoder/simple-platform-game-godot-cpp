@@ -4,8 +4,8 @@
 #include "godot_cpp/classes/animation_player.hpp"
 #include "godot_cpp/classes/collision_shape2d.hpp"
 #include "godot_cpp/classes/sprite2d.hpp"
-#include "godot_cpp/core/print_string.hpp"
 #include "godot_cpp/variant/callable_method_pointer.hpp"
+#include "godot_cpp/variant/color.hpp"
 #include "godot_cpp/variant/string_name.hpp"
 #include "godot_cpp/variant/vector2.hpp"
 
@@ -55,7 +55,13 @@ void Drone::Explode() {
 }
 
 void Drone::TakeDamage(godot::Vector2 dir) {
-	godot::print_line("ahihi");
+  auto* drone_frame = get_node<godot::AnimatedSprite2D>("AnimatedSprite2D");
+  if (drone_frame) {
+    auto tween = create_tween();
+    tween->tween_property(drone_frame, "modulate", godot::Color(1.0F, 0.29F, 0.204F), 0.2F);
+    tween->tween_property(drone_frame, "modulate", godot::Color(1.0F, 1.0F, 1.0F), 0.2F);
+  }
+
   health_ -= 1;
   move_and_collide(dir * 5);
   if (health_ == 0) {

@@ -35,7 +35,7 @@ void Bullet::_ready() {
   auto* sprite_node = get_node<godot::Sprite2D>("Sprite2D");
   if (sprite_node) {
     sprite_node->set_scale(Vector2(0.0F, 0.0F));
-    godot::Ref<godot::Tween> tween = create_tween();
+    auto tween = create_tween();
     tween->tween_property(sprite_node, "scale", Vector2(1.0F, 1.0F), 0.2);
   }
 }
