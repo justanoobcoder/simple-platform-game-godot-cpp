@@ -14,4 +14,12 @@
 			Player's speed
 		</member>
 	</members>
+	<signals>
+		<signal name="shoot">
+			<param index="0" name="pos" type="Vector2" />
+			<param index="1" name="dir" type="Vector2" />
+			<description>
+			</description>
+		</signal>
+	</signals>
 </class>
