@@ -97,5 +97,5 @@ void Player::KnockBack(Vector2 dir) {
   if (is_knocked_back_) return;
   is_knocked_back_ = true;
   direction_x_ = 0.0F;
-  vel_ = Vector2(get_position().x > dir.x ? -150 : 150, -150);
+  vel_ = Vector2(get_position().x < dir.x ? -150 : 150, -150);
 }

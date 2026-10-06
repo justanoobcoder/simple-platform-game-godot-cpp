@@ -29,6 +29,7 @@ class Drone : public godot::CharacterBody2D {
   float speed_ = 50.0F;
   godot::Vector2 direction_{};
   bool player_in_range_ = false;
+  bool has_exploded_ = false;
   godot::CharacterBody2D* player_{};
 };
 

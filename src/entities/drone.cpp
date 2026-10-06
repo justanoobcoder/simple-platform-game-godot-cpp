@@ -34,6 +34,9 @@ void Drone::_physics_process(double) {
 }
 
 void Drone::Explode() {
+  if (has_exploded_) return;
+  has_exploded_ = true;
+
   // stop tracking and following player after exploded
   player_ = nullptr;
   direction_ = godot::Vector2();
@@ -41,6 +44,12 @@ void Drone::Explode() {
   auto* collision_shape = get_node<godot::CollisionShape2D>("CollisionShape2D");
   if (collision_shape) {
     collision_shape->set_deferred("disabled", true);
+  }
+
+  auto* explode_collision =
+    get_node<godot::CollisionShape2D>("Explosion/ExplodeRange/CollisionShape2D");
+  if (explode_collision) {
+    explode_collision->set_deferred("disabled", true);
   }
 
   auto* drone_frame = get_node<godot::AnimatedSprite2D>("AnimatedSprite2D");
@@ -56,6 +65,8 @@ void Drone::Explode() {
 }
 
 void Drone::TakeDamage(godot::Vector2 dir) {
+  if (has_exploded_) return;
+
   auto* drone_frame = get_node<godot::AnimatedSprite2D>("AnimatedSprite2D");
   if (drone_frame) {
     auto tween = create_tween();
@@ -80,10 +91,11 @@ void Drone::OnPlayerInAttackRangeExited(godot::Node2D*) {
 }
 
 void Drone::OnPlayerInExplodeRangeEntered(godot::Node2D* body) {
+  if (has_exploded_) return;
   Explode();
   auto* player = godot::Object::cast_to<Player>(body);
   if (player) {
-    player->KnockBack(direction_);
+    player->KnockBack(get_position());
   }
 }
 
