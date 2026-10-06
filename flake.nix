@@ -21,7 +21,7 @@
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             scons
-						python3
+            python3
             clang-tools
             pkg-config
           ];
