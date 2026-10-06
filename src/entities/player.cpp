@@ -1,13 +1,13 @@
 #include "player.hpp"
 
 #include <cmath>
+#include <numbers>
 
 #include "godot_cpp/classes/animation_player.hpp"
 #include "godot_cpp/classes/input.hpp"
 #include "godot_cpp/classes/sprite2d.hpp"
 #include "godot_cpp/core/class_db.hpp"
 #include "godot_cpp/core/math.hpp"
-#include "godot_cpp/core/math_defs.hpp"
 #include "godot_cpp/core/object.hpp"
 #include "godot_cpp/variant/variant.hpp"
 #include "godot_cpp/variant/vector2.hpp"
@@ -74,7 +74,7 @@ void Player::UpdateAnimation() {
 
   // voodoo magic
   const auto aim = get_local_mouse_position();
-  upper_frame_->set_frame(godot::Math::posmod(std::round(aim.angle() / (godot::Math::PI / 4)), 8));
+  upper_frame_->set_frame(godot::Math::posmod(std::round(aim.angle() / (std::numbers::pi / 4)), 8));
 
   if (!is_on_floor()) {
     lower_body_animation_->play("jump");

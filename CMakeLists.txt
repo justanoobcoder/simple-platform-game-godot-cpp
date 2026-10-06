@@ -71,8 +71,8 @@ endif()
 
 target_link_libraries(${LIBNAME} PRIVATE godot-cpp)
 
-# Require at least C++17 for this target
-set_property(TARGET ${LIBNAME} PROPERTY CXX_STANDARD 17)
+# Require at least C++20 for this target
+set_property(TARGET ${LIBNAME} PROPERTY CXX_STANDARD 20)
 
 set_target_properties(${LIBNAME}
     PROPERTIES
