@@ -90,7 +90,9 @@ void Player::UpdateAnimation() {
   }
 
   lower_body_animation_->play(direction_x_ != 0.0F ? "run" : "idle");
-  lower_frame_->set_flip_h(direction_x_ < 0.0F);
+  if (direction_x_ != 0.0F) {
+    lower_frame_->set_flip_h(direction_x_ < 0.0F);
+  }
 }
 
 void Player::KnockBack(Vector2 dir) {
