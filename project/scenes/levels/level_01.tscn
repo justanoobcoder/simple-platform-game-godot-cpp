@@ -483,3 +483,9 @@ position = Vector2(33, 552)
 
 [node name="Drone" parent="." unique_id=567364407 instance=ExtResource("3_2djvx")]
 position = Vector2(214, 489)
+
+[node name="Drone2" parent="." unique_id=1664021297 instance=ExtResource("3_2djvx")]
+position = Vector2(236, 483)
+
+[node name="Drone3" parent="." unique_id=927033161 instance=ExtResource("3_2djvx")]
+position = Vector2(275, 503)

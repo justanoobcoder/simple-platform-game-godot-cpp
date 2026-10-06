@@ -4,13 +4,21 @@
 #include "godot_cpp/classes/animated_sprite2d.hpp"
 #include "godot_cpp/classes/animation_player.hpp"
 #include "godot_cpp/classes/collision_shape2d.hpp"
+#include "godot_cpp/classes/object.hpp"
+#include "godot_cpp/classes/scene_tree.hpp"
 #include "godot_cpp/classes/sprite2d.hpp"
+#include "godot_cpp/core/class_db.hpp"
 #include "godot_cpp/variant/callable_method_pointer.hpp"
 #include "godot_cpp/variant/color.hpp"
 #include "godot_cpp/variant/string_name.hpp"
 #include "godot_cpp/variant/vector2.hpp"
 
-void Drone::_bind_methods() {}
+using godot::ClassDB;
+using godot::D_METHOD;
+
+void Drone::_bind_methods() {
+  ClassDB::bind_method(D_METHOD("chain_explode"), &Drone::ChainExplode);
+}
 
 void Drone::_ready() {
   auto* attack_range = get_node_or_null("AttackRange");
@@ -61,6 +69,20 @@ void Drone::Explode() {
     explode_animation->play("explode");
     explode_animation->connect("animation_finished",
                                callable_mp(this, &Drone::OnExplodeAnimationFinished));
+  }
+}
+
+void Drone::ChainExplode() {
+  auto* tree = get_tree();
+  if (!tree) return;
+
+  const auto nodes = tree->get_nodes_in_group("Drones");
+  for (const auto& node : nodes) {
+    auto* drone = godot::Object::cast_to<Drone>(node);
+    if (!drone || drone == this || drone->has_exploded_) continue;
+    if (get_position().distance_to(drone->get_position()) <= 20.0F) {
+      drone->Explode();
+    }
   }
 }
 

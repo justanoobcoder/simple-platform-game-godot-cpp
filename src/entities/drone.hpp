@@ -13,6 +13,7 @@ class Drone : public godot::CharacterBody2D {
 
   void TakeDamage(godot::Vector2 dir);
   void Explode();
+  void ChainExplode();
 
   void OnPlayerInAttackRangeEntered(godot::Node2D* body);
   void OnPlayerInAttackRangeExited(godot::Node2D* body);
