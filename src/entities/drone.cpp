@@ -5,6 +5,7 @@
 #include "godot_cpp/classes/animation_player.hpp"
 #include "godot_cpp/classes/collision_shape2d.hpp"
 #include "godot_cpp/classes/object.hpp"
+#include "godot_cpp/classes/point_light2d.hpp"
 #include "godot_cpp/classes/scene_tree.hpp"
 #include "godot_cpp/classes/sprite2d.hpp"
 #include "godot_cpp/core/class_db.hpp"
@@ -30,6 +31,10 @@ void Drone::_ready() {
   if (explode_range) {
     explode_range->connect("body_entered",
                            callable_mp(this, &Drone::OnPlayerInExplodeRangeEntered));
+  }
+  auto* cam_light_timer = get_node_or_null("CamLightTimer");
+  if (cam_light_timer) {
+    cam_light_timer->connect("timeout", callable_mp(this, &Drone::OnCamLightTimerTimeOut));
   }
 }
 
@@ -122,3 +127,12 @@ void Drone::OnPlayerInExplodeRangeEntered(godot::Node2D* body) {
 }
 
 void Drone::OnExplodeAnimationFinished(const godot::StringName&) { queue_free(); }
+
+void Drone::OnCamLightTimerTimeOut() {
+  auto* cam_light = get_node<godot::PointLight2D>("CamLight");
+  if (cam_light) {
+    auto tween = create_tween();
+    tween->tween_property(cam_light, "energy", 1.3F, 0.5F);
+    tween->tween_property(cam_light, "energy", 0.0F, 0.5F);
+  }
+}

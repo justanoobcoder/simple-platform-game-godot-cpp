@@ -19,6 +19,7 @@ class Drone : public godot::CharacterBody2D {
   void OnPlayerInAttackRangeExited(godot::Node2D* body);
   void OnPlayerInExplodeRangeEntered(godot::Node2D* body);
   void OnExplodeAnimationFinished(const godot::StringName&);
+	void OnCamLightTimerTimeOut();
 
  protected:
   static void _bind_methods();
