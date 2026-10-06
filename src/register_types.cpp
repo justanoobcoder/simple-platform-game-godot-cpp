@@ -6,13 +6,19 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
+#include "entities/bullet.hpp"
+#include "entities/player.hpp"
+#include "levels/level_01.hpp"
+
 using namespace godot;  // NOLINT
 
 void initialize_gdextension_types(ModuleInitializationLevel level) {  // NOLINT
   if (level != MODULE_INITIALIZATION_LEVEL_SCENE) {
     return;
   }
-  // GDREGISTER_CLASS(ExampleClass);
+  GDREGISTER_RUNTIME_CLASS(Level01);
+  GDREGISTER_RUNTIME_CLASS(Player);
+  GDREGISTER_RUNTIME_CLASS(Bullet);
 }
 
 void uninitialize_gdextension_types(ModuleInitializationLevel level) {  // NOLINT

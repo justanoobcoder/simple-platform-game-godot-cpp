@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bw2m0ght3f0ly"]
+
+[ext_resource type="PackedScene" uid="uid://ctyvjfea32umr" path="res://scenes/entities/player.tscn" id="1_m802k"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i2aat"]
+size = Vector2(814, 20)
+
+[node name="Level-01" type="Level01" unique_id=1248662260]
+
+[node name="Layers" type="Node2D" parent="." unique_id=2090735124]
+
+[node name="BGLayer" type="TileMapLayer" parent="Layers" unique_id=466653206]
+
+[node name="BGDetailsLayer" type="TileMapLayer" parent="Layers" unique_id=690221080]
+
+[node name="FGLayer" type="TileMapLayer" parent="Layers" unique_id=384120259]
+
+[node name="CollisionLayer" type="TileMapLayer" parent="Layers" unique_id=901923815]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1469519767]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1723903505]
+position = Vector2(465, 562)
+shape = SubResource("RectangleShape2D_i2aat")
+
+[node name="Player" parent="." unique_id=1497666305 instance=ExtResource("1_m802k")]
+position = Vector2(105, 510)
+
+[node name="Bullets" type="Node2D" parent="." unique_id=530350530]
