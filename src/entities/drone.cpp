@@ -1,5 +1,6 @@
 #include "drone.hpp"
 
+#include "entities/player.hpp"
 #include "godot_cpp/classes/animated_sprite2d.hpp"
 #include "godot_cpp/classes/animation_player.hpp"
 #include "godot_cpp/classes/collision_shape2d.hpp"
@@ -78,6 +79,12 @@ void Drone::OnPlayerInAttackRangeExited(godot::Node2D*) {
   direction_ = godot::Vector2();
 }
 
-void Drone::OnPlayerInExplodeRangeEntered(godot::Node2D*) { Explode(); }
+void Drone::OnPlayerInExplodeRangeEntered(godot::Node2D* body) {
+  Explode();
+  auto* player = godot::Object::cast_to<Player>(body);
+  if (player) {
+    player->KnockBack(direction_);
+  }
+}
 
 void Drone::OnExplodeAnimationFinished(const godot::StringName&) { queue_free(); }

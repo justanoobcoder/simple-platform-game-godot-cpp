@@ -20,6 +20,7 @@ class Player : public godot::CharacterBody2D {
 
   void HandleInput();
   void UpdateAnimation();
+  void KnockBack(godot::Vector2 dir);
 
  protected:
   static void _bind_methods();
@@ -31,6 +32,7 @@ class Player : public godot::CharacterBody2D {
   float speed_ = 100.0F;
   float jump_strength_ = 300.0F;
   float direction_x_;
+	bool is_knocked_back_ = false;
   godot::Sprite2D* upper_frame_;
   godot::Sprite2D* lower_frame_;
   godot::AnimationPlayer* lower_body_animation_;

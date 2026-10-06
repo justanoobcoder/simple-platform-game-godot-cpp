@@ -19,6 +19,7 @@ using godot::Input;
 using godot::PropertyInfo;
 using godot::Sprite2D;
 using godot::Variant;
+using godot::Vector2;
 
 void Player::_bind_methods() {
   ClassDB::bind_method(D_METHOD("set_speed", "speed"), &Player::SetSpeed);
@@ -43,8 +44,15 @@ void Player::_ready() {
 }
 
 void Player::_physics_process(double delta) {
-  HandleInput();
-  vel_.x = direction_x_ * speed_;
+  if (is_knocked_back_) {
+    vel_.x = godot::Math::move_toward(vel_.x, 0.0F, 600.0F * static_cast<float>(delta));
+    if (vel_.x == 0.0F) {
+      is_knocked_back_ = false;
+    }
+  } else {
+    HandleInput();
+    vel_.x = direction_x_ * speed_;
+  }
   if (!is_on_floor()) {
     vel_ += get_gravity() * delta;
   }
@@ -63,8 +71,8 @@ void Player::HandleInput() {
     emit_signal("shoot", get_position(), get_local_mouse_position().normalized());
     if (cross_hair_) {
       auto tween = create_tween();
-      tween->tween_property(cross_hair_, "scale", godot::Vector2(0.1F, 0.1F), 0.2F);
-      tween->tween_property(cross_hair_, "scale", godot::Vector2(0.4F, 0.4F), 0.2F);
+      tween->tween_property(cross_hair_, "scale", Vector2(0.1F, 0.1F), 0.2F);
+      tween->tween_property(cross_hair_, "scale", Vector2(0.4F, 0.4F), 0.2F);
     }
   }
 }
@@ -83,4 +91,11 @@ void Player::UpdateAnimation() {
 
   lower_body_animation_->play(direction_x_ != 0.0F ? "run" : "idle");
   lower_frame_->set_flip_h(direction_x_ < 0.0F);
+}
+
+void Player::KnockBack(Vector2 dir) {
+  if (is_knocked_back_) return;
+  is_knocked_back_ = true;
+  direction_x_ = 0.0F;
+  vel_ = Vector2(get_position().x > dir.x ? -150 : 150, -150);
 }
