@@ -45,11 +45,14 @@ void BackAndForthMover::_ready() {
   set_physics_process(drive_owner_);
 
   body_ = godot::Object::cast_to<godot::Node2D>(get_parent());
+  if (!body_) {
+    UtilityFunctions::push_warning("BackAndForthMover: needs a Node2D parent");
+    return;
+  }
   auto* pa = get_node<godot::Marker2D>("PointA");
   auto* pb = get_node<godot::Marker2D>("PointB");
-  if (!body_ || !pa || !pb) {
-    UtilityFunctions::push_warning(
-      "BackAndForthMover: needs a Node2D parent and PointA/PointB children");
+  if (!pa || !pb) {
+    UtilityFunctions::push_warning("BackAndForthMover: needs PointA/PointB children");
     return;
   }
   a_ = pa->get_global_position();
