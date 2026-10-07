@@ -36,6 +36,7 @@ void Drone::_ready() {
   if (cam_light_timer) {
     cam_light_timer->connect("timeout", callable_mp(this, &Drone::OnCamLightTimerTimeOut));
   }
+	OnCamLightTimerTimeOut();
 }
 
 void Drone::_physics_process(double) {
