@@ -6,6 +6,7 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
+#include "components/back_and_forth_mover.hpp"
 #include "entities/bullet.hpp"
 #include "entities/drone.hpp"
 #include "entities/player.hpp"
@@ -17,6 +18,7 @@ void initialize_gdextension_types(ModuleInitializationLevel level) {  // NOLINT
   if (level != MODULE_INITIALIZATION_LEVEL_SCENE) {
     return;
   }
+  GDREGISTER_CLASS(BackAndForthMover);
   GDREGISTER_RUNTIME_CLASS(Level01);
   GDREGISTER_RUNTIME_CLASS(Player);
   GDREGISTER_RUNTIME_CLASS(Bullet);

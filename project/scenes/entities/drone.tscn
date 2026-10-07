@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cetjusbnxb2ey" path="res://assets/sprites/characters/drone.png" id="1_gs6nb"]
 [ext_resource type="Texture2D" uid="uid://bkqn2f0em3835" path="res://assets/sprites/fire/explosion.png" id="2_n87ok"]
-[ext_resource type="Texture2D" uid="uid://cltv4bvfgakxd" path="res://assets/sprites/lights/l2.png" id="3_xcp44"]
+[ext_resource type="Texture2D" uid="uid://dcxdoaa6rln7n" path="res://assets/sprites/lights/main.png" id="4_0tq5o"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n87ok"]
 atlas = ExtResource("1_gs6nb")
@@ -39,6 +39,10 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jw78r"]
+blend_mode = 1
+light_mode = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jw78r"]
 radius = 8.0
@@ -103,16 +107,26 @@ _data = {
 [node name="Drone" type="Drone" unique_id=1664021297 groups=["Drones"]]
 collision_layer = 8
 collision_mask = 7
+motion_mode = 1
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2056688380]
 sprite_frames = SubResource("SpriteFrames_jw78r")
 autoplay = "default"
 frame_progress = 0.88245994
 
+[node name="CamLight" type="Sprite2D" parent="." unique_id=1326084734]
+modulate = Color(1, 0.25490198, 0.13725491, 1)
+material = SubResource("CanvasItemMaterial_jw78r")
+position = Vector2(-2.7500021, 1.2499982)
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("4_0tq5o")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1483259309]
+visible = false
 shape = SubResource("CircleShape2D_jw78r")
 
 [node name="AttackRange" type="Area2D" parent="." unique_id=1337254185]
+visible = false
 collision_layer = 0
 collision_mask = 2
 
@@ -122,6 +136,7 @@ shape = SubResource("CircleShape2D_8d4nc")
 [node name="Explosion" type="Node2D" parent="." unique_id=1113259986]
 
 [node name="ExplodeRange" type="Area2D" parent="Explosion" unique_id=28593945]
+visible = false
 collision_layer = 0
 collision_mask = 2
 
@@ -136,11 +151,11 @@ hframes = 8
 [node name="ExplodeAnimation" type="AnimationPlayer" parent="Explosion" unique_id=1439508355]
 libraries/ = SubResource("AnimationLibrary_6vf5s")
 
-[node name="CamLight" type="PointLight2D" parent="." unique_id=528745851]
-position = Vector2(-3, 1)
-scale = Vector2(0.63437504, 0.68749994)
-color = Color(1, 0.09019608, 0.105882354, 1)
-texture = ExtResource("3_xcp44")
+[node name="BackAndForthMover" type="BackAndForthMover" parent="." unique_id=1888124908]
+drive_owner = false
 
-[node name="CamLightTimer" type="Timer" parent="." unique_id=676049218]
-autostart = true
+[node name="PointA" type="Marker2D" parent="BackAndForthMover" unique_id=1766659009]
+position = Vector2(25, 0)
+
+[node name="PointB" type="Marker2D" parent="BackAndForthMover" unique_id=552333163]
+position = Vector2(-25, 0)

@@ -5,7 +5,6 @@
 #include "godot_cpp/classes/animation_player.hpp"
 #include "godot_cpp/classes/collision_shape2d.hpp"
 #include "godot_cpp/classes/object.hpp"
-#include "godot_cpp/classes/point_light2d.hpp"
 #include "godot_cpp/classes/scene_tree.hpp"
 #include "godot_cpp/classes/sprite2d.hpp"
 #include "godot_cpp/core/class_db.hpp"
@@ -22,6 +21,11 @@ void Drone::_bind_methods() {
 }
 
 void Drone::_ready() {
+  sprite_ = get_node<godot::AnimatedSprite2D>("AnimatedSprite2D");
+  cam_light_ = get_node<godot::Sprite2D>("CamLight");
+
+  mover_ = get_node<BackAndForthMover>("BackAndForthMover");
+
   auto* attack_range = get_node_or_null("AttackRange");
   if (attack_range) {
     attack_range->connect("body_entered", callable_mp(this, &Drone::OnPlayerInAttackRangeEntered));
@@ -32,19 +36,30 @@ void Drone::_ready() {
     explode_range->connect("body_entered",
                            callable_mp(this, &Drone::OnPlayerInExplodeRangeEntered));
   }
-  auto* cam_light_timer = get_node_or_null("CamLightTimer");
-  if (cam_light_timer) {
-    cam_light_timer->connect("timeout", callable_mp(this, &Drone::OnCamLightTimerTimeOut));
-  }
-	OnCamLightTimerTimeOut();
+  StartCamBlink();
 }
 
-void Drone::_physics_process(double) {
+void Drone::_physics_process(double delta) {
   if (player_) {
     direction_ = (player_->get_position() - get_position()).normalized();
+  } else if (mover_ && !has_exploded_) {
+    direction_ = mover_->GetDirection(delta);
+  }
+  if (direction_.x != 0.0F) {
+    sprite_->set_flip_h(direction_.x > 0);
+    auto cam_pos = cam_light_->get_position();
+    if ((direction_.x > 0 && cam_pos.x < 0) || (direction_.x < 0 && cam_pos.x > 0)) cam_pos.x *= -1;
+    cam_light_->set_position(cam_pos);
   }
   set_velocity(direction_ * speed_);
   move_and_slide();
+}
+
+void Drone::StartCamBlink() {
+  cam_blink_tween_ = create_tween();
+  cam_blink_tween_->set_loops();
+  cam_blink_tween_->tween_property(cam_light_, "modulate:a", 0.0F, 0.5F);
+  cam_blink_tween_->tween_property(cam_light_, "modulate:a", 1.0F, 0.5F);
 }
 
 void Drone::Explode() {
@@ -66,11 +81,10 @@ void Drone::Explode() {
     explode_collision->set_deferred("disabled", true);
   }
 
-  auto* drone_frame = get_node<godot::AnimatedSprite2D>("AnimatedSprite2D");
   auto* explode_frame = get_node<godot::Sprite2D>("Explosion/ExplodeFrame");
   auto* explode_animation = get_node<godot::AnimationPlayer>("Explosion/ExplodeAnimation");
-  if (drone_frame && explode_frame && explode_animation) {
-    drone_frame->hide();
+  if (sprite_ && explode_frame && explode_animation) {
+    sprite_->hide();
     explode_frame->show();
     explode_animation->play("explode");
     explode_animation->connect("animation_finished",
@@ -124,16 +138,5 @@ void Drone::OnPlayerInExplodeRangeEntered(godot::Node2D* body) {
   auto* player = godot::Object::cast_to<Player>(body);
   if (player) {
     player->KnockBack(get_position());
-  }
-}
-
-void Drone::OnExplodeAnimationFinished(const godot::StringName&) { queue_free(); }
-
-void Drone::OnCamLightTimerTimeOut() {
-  auto* cam_light = get_node<godot::PointLight2D>("CamLight");
-  if (cam_light) {
-    auto tween = create_tween();
-    tween->tween_property(cam_light, "energy", 1.3F, 0.5F);
-    tween->tween_property(cam_light, "energy", 0.0F, 0.5F);
   }
 }
