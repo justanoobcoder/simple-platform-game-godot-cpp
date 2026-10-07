@@ -25,6 +25,9 @@
 		<member name="drive_owner" type="bool" setter="set_drive_owner" getter="is_drive_owner" default="true">
 			If [code]true[/code], the component automatically moves the parent node every physics frame using its internal [method Node._physics_process]. Set to [code]false[/code] if you want to drive the parent yourself by calling [method get_direction] and applying velocity manually.
 		</member>
+		<member name="going_to_b" type="bool" setter="set_going_to_b" getter="is_going_to_b" default="true">
+			If [code]true[/code], the parent starts heading toward [code]PointB[/code] when the scene begins. If [code]false[/code], it starts heading toward [code]PointA[/code] instead. This flag is toggled automatically every time the parent arrives at an endpoint, so it reflects the current travel direction at runtime.
+		</member>
 		<member name="enabled" type="bool" setter="set_enabled" getter="is_enabled" default="true">
 			If [code]false[/code], the mover stops producing movement. The parent stays in place until [code]enabled[/code] is set back to [code]true[/code].
 		</member>
