@@ -8,6 +8,7 @@
 
 using godot::ClassDB;
 using godot::D_METHOD;
+using godot::MethodInfo;
 using godot::PROPERTY_HINT_RANGE;
 using godot::PropertyInfo;
 using godot::UtilityFunctions;
@@ -38,6 +39,9 @@ void BackAndForthMover::_bind_methods() {
     PropertyInfo(Variant::FLOAT, "start_distance", PROPERTY_HINT_RANGE, "0,2000,1,or_greater"),
     "set_start_distance", "get_start_distance");
   ADD_PROPERTY(PropertyInfo(Variant::BOOL, "random_start"), "set_random_start", "is_random_start");
+
+  ADD_SIGNAL(MethodInfo("reached_point_a"));
+  ADD_SIGNAL(MethodInfo("reached_point_b"));
 }
 
 void BackAndForthMover::SetDriveOwner(bool d) {
@@ -83,6 +87,7 @@ godot::Vector2 BackAndForthMover::GetDirection(double delta) {
   if (pos.distance_to(target) <= arrive_radius_) {
     going_to_b_ = !going_to_b_;
     wait_left_ = wait_time_;
+    emit_signal(going_to_b_ ? "reached_point_a" : "reached_point_b");
     return {};
   }
   return (target - pos).normalized();

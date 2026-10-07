@@ -21,6 +21,18 @@
 			</description>
 		</method>
 	</methods>
+	<signals>
+		<signal name="reached_point_a">
+			<description>
+				Emitted when the parent arrives at [code]PointA[/code] and begins heading toward [code]PointB[/code].
+			</description>
+		</signal>
+		<signal name="reached_point_b">
+			<description>
+				Emitted when the parent arrives at [code]PointB[/code] and begins heading toward [code]PointA[/code].
+			</description>
+		</signal>
+	</signals>
 	<members>
 		<member name="drive_owner" type="bool" setter="set_drive_owner" getter="is_drive_owner" default="true">
 			If [code]true[/code], the component automatically moves the parent node every physics frame using its internal [method Node._physics_process]. Set to [code]false[/code] if you want to drive the parent yourself by calling [method get_direction] and applying velocity manually.
