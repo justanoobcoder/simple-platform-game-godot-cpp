@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="BackAndForthMover" inherits="Node2D" api_type="extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Moves a parent [Node2D] back and forth between two points.
+	</brief_description>
+	<description>
+		[BackAndForthMover] is a component node that drives its parent [Node2D] to patrol back and forth between two child [Marker2D] nodes named [code]PointA[/code] and [code]PointB[/code].
+		On [method Node._ready], the component reads the global positions of [code]PointA[/code] and [code]PointB[/code] and places the parent at the chosen start position along the path. It then moves the parent toward the current target point each physics frame, reverting direction once it arrives within [code]arrive_radius[/code] of that point, optionally waiting for [member wait_time] seconds before turning around.
+		[b]Setup:[/b] Add a [BackAndForthMover] as a child of the node you want to move, then add two [Marker2D] children to it named exactly [code]PointA[/code] and [code]PointB[/code]. Place those markers in the world to define the patrol path.
+		[b]Manual driving:[/b] If [member drive_owner] is [code]false[/code], the component does not call [method CharacterBody2D.move_and_slide] itself. Instead, call [method get_direction] from your own [method Node._physics_process] to retrieve the normalized movement direction and apply velocity yourself.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_direction">
+			<return type="Vector2" />
+			<param index="0" name="delta" type="float" />
+			<description>
+				Returns the normalized direction the parent should move this frame. Returns [constant Vector2.ZERO] when the mover is inactive, [member enabled] is [code]false[/code], or the parent is waiting at a turn-around point.
+				Only relevant when [member drive_owner] is [code]false[/code].
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="drive_owner" type="bool" setter="set_drive_owner" getter="is_drive_owner" default="true">
+			If [code]true[/code], the component automatically moves the parent node every physics frame using its internal [method Node._physics_process]. Set to [code]false[/code] if you want to drive the parent yourself by calling [method get_direction] and applying velocity manually.
+		</member>
+		<member name="enabled" type="bool" setter="set_enabled" getter="is_enabled" default="true">
+			If [code]false[/code], the mover stops producing movement. The parent stays in place until [code]enabled[/code] is set back to [code]true[/code].
+		</member>
+		<member name="random_start" type="bool" setter="set_random_start" getter="is_random_start" default="false">
+			If [code]true[/code], the parent is placed at a random position along the path on [method Node._ready], ignoring [member start_distance]. Useful for de-syncing multiple instances patrolling the same route so they do not move in lockstep.
+			When [code]false[/code], [member start_distance] is used instead.
+		</member>
+		<member name="speed" type="float" setter="set_speed" getter="get_speed" default="60.0">
+			Movement speed of the parent node in pixels per second.
+		</member>
+		<member name="start_distance" type="float" setter="set_start_distance" getter="get_start_distance" default="0.0">
+			Distance in pixels from [code]PointA[/code] along the path toward [code]PointB[/code] at which the parent is placed when the scene starts. A value of [code]0[/code] places the parent at [code]PointA[/code]; a value equal to the full path length places it at [code]PointB[/code]. The value is clamped to the actual path length.
+			Ignored when [member random_start] is [code]true[/code].
+		</member>
+		<member name="wait_time" type="float" setter="set_wait_time" getter="get_wait_time" default="1.0">
+			Time in seconds the parent pauses at each end of the path before reversing direction.
+		</member>
+	</members>
+</class>
