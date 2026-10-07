@@ -22,6 +22,8 @@ class BackAndForthMover : public godot::Node2D {
   void SetDriveOwner(bool d);
   [[nodiscard]] bool IsDriveOwner() const { return drive_owner_; }
   void SetStartDistance(float d) { start_distance_ = d; }
+  void SetGoingToB(bool g) { going_to_b_ = g; }
+  [[nodiscard]] bool IsGoingToB() const { return going_to_b_; }
   [[nodiscard]] float GetStartDistance() const { return start_distance_; }
   void SetRandomStart(bool r) { random_start_ = r; }
   [[nodiscard]] bool IsRandomStart() const { return random_start_; }

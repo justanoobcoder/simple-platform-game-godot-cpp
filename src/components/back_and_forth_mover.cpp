@@ -4,10 +4,14 @@
 
 #include "godot_cpp/classes/marker2d.hpp"
 #include "godot_cpp/variant/utility_functions.hpp"
+#include "godot_cpp/variant/variant.hpp"
 
 using godot::ClassDB;
 using godot::D_METHOD;
+using godot::PROPERTY_HINT_RANGE;
+using godot::PropertyInfo;
 using godot::UtilityFunctions;
+using godot::Variant;
 
 void BackAndForthMover::_bind_methods() {
   ClassDB::bind_method(D_METHOD("set_speed", "s"), &BackAndForthMover::SetSpeed);
@@ -18,22 +22,22 @@ void BackAndForthMover::_bind_methods() {
   ClassDB::bind_method(D_METHOD("is_enabled"), &BackAndForthMover::IsEnabled);
   ClassDB::bind_method(D_METHOD("set_drive_owner", "d"), &BackAndForthMover::SetDriveOwner);
   ClassDB::bind_method(D_METHOD("is_drive_owner"), &BackAndForthMover::IsDriveOwner);
+  ClassDB::bind_method(D_METHOD("set_going_to_b", "g"), &BackAndForthMover::SetGoingToB);
+  ClassDB::bind_method(D_METHOD("is_going_to_b"), &BackAndForthMover::IsGoingToB);
   ClassDB::bind_method(D_METHOD("set_start_distance", "d"), &BackAndForthMover::SetStartDistance);
   ClassDB::bind_method(D_METHOD("get_start_distance"), &BackAndForthMover::GetStartDistance);
   ClassDB::bind_method(D_METHOD("set_random_start", "r"), &BackAndForthMover::SetRandomStart);
   ClassDB::bind_method(D_METHOD("is_random_start"), &BackAndForthMover::IsRandomStart);
 
-  ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "speed"), "set_speed", "get_speed");
-  ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "wait_time"), "set_wait_time",
-               "get_wait_time");
-  ADD_PROPERTY(godot::PropertyInfo(godot::Variant::BOOL, "enabled"), "set_enabled", "is_enabled");
-  ADD_PROPERTY(godot::PropertyInfo(godot::Variant::BOOL, "drive_owner"), "set_drive_owner",
-               "is_drive_owner");
-  ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "start_distance",
-                                   godot::PROPERTY_HINT_RANGE, "0,2000,1,or_greater"),
-               "set_start_distance", "get_start_distance");
-  ADD_PROPERTY(godot::PropertyInfo(godot::Variant::BOOL, "random_start"), "set_random_start",
-               "is_random_start");
+  ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "speed"), "set_speed", "get_speed");
+  ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "wait_time"), "set_wait_time", "get_wait_time");
+  ADD_PROPERTY(PropertyInfo(Variant::BOOL, "enabled"), "set_enabled", "is_enabled");
+  ADD_PROPERTY(PropertyInfo(Variant::BOOL, "drive_owner"), "set_drive_owner", "is_drive_owner");
+  ADD_PROPERTY(PropertyInfo(Variant::BOOL, "going_to_b"), "set_going_to_b", "is_going_to_b");
+  ADD_PROPERTY(
+    PropertyInfo(Variant::FLOAT, "start_distance", PROPERTY_HINT_RANGE, "0,2000,1,or_greater"),
+    "set_start_distance", "get_start_distance");
+  ADD_PROPERTY(PropertyInfo(Variant::BOOL, "random_start"), "set_random_start", "is_random_start");
 }
 
 void BackAndForthMover::SetDriveOwner(bool d) {
@@ -91,7 +95,6 @@ void BackAndForthMover::_physics_process(double delta) {
   if (dir == godot::Vector2()) return;
 
   const godot::Vector2 pos = body_->get_global_position();
-  // clamp so a fast mover never overshoots the point and oscillates
   const float step = std::min(speed_ * static_cast<float>(delta), pos.distance_to(Target()));
   body_->set_global_position(pos + dir * step);
 }
