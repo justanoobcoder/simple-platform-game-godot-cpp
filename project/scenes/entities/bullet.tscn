@@ -1,9 +1,14 @@
 [gd_scene format=3 uid="uid://dxgrup4qovhs7"]
 
 [ext_resource type="Texture2D" uid="uid://2vq34bhfhuym" path="res://assets/sprites/fire/bullet.png" id="1_ma0cl"]
+[ext_resource type="Texture2D" uid="uid://0y5eyfetxalf" path="res://assets/sprites/lights/l3.png" id="2_byxw7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jw78r"]
 size = Vector2(6, 2)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jw78r"]
+blend_mode = 1
+light_mode = 1
 
 [node name="Bullet" type="Bullet" unique_id=1881034382]
 collision_layer = 4
@@ -16,3 +21,8 @@ texture = ExtResource("1_ma0cl")
 shape = SubResource("RectangleShape2D_jw78r")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=2039896188]
+
+[node name="BulletLight" type="Sprite2D" parent="." unique_id=1251684035]
+material = SubResource("CanvasItemMaterial_jw78r")
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_byxw7")
