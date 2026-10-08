@@ -18,7 +18,7 @@ void initialize_gdextension_types(ModuleInitializationLevel level) {  // NOLINT
   if (level != MODULE_INITIALIZATION_LEVEL_SCENE) {
     return;
   }
-  GDREGISTER_CLASS(BackAndForthMover);
+  GDREGISTER_RUNTIME_CLASS(BackAndForthMover);
   GDREGISTER_RUNTIME_CLASS(Level01);
   GDREGISTER_RUNTIME_CLASS(Player);
   GDREGISTER_RUNTIME_CLASS(Bullet);
