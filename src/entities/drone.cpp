@@ -70,6 +70,8 @@ void Drone::Explode() {
   player_ = nullptr;
   direction_ = godot::Vector2();
 
+	cam_light_->hide();
+
   auto* collision_shape = get_node<godot::CollisionShape2D>("CollisionShape2D");
   if (collision_shape) {
     collision_shape->set_deferred("disabled", true);
