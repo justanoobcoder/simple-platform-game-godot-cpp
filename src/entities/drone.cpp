@@ -5,6 +5,7 @@
 #include "godot_cpp/classes/animation_player.hpp"
 #include "godot_cpp/classes/collision_shape2d.hpp"
 #include "godot_cpp/classes/object.hpp"
+#include "godot_cpp/classes/point_light2d.hpp"
 #include "godot_cpp/classes/scene_tree.hpp"
 #include "godot_cpp/classes/sprite2d.hpp"
 #include "godot_cpp/core/class_db.hpp"
@@ -70,7 +71,7 @@ void Drone::Explode() {
   player_ = nullptr;
   direction_ = godot::Vector2();
 
-	cam_light_->hide();
+  cam_light_->hide();
 
   auto* collision_shape = get_node<godot::CollisionShape2D>("CollisionShape2D");
   if (collision_shape) {
@@ -81,6 +82,11 @@ void Drone::Explode() {
     get_node<godot::CollisionShape2D>("Explosion/ExplodeRange/CollisionShape2D");
   if (explode_collision) {
     explode_collision->set_deferred("disabled", true);
+  }
+
+  auto* explode_flash = get_node<godot::PointLight2D>("Explosion/ExplosionFlash");
+  if (explode_flash) {
+    explode_flash->show();
   }
 
   auto* explode_frame = get_node<godot::Sprite2D>("Explosion/ExplodeFrame");

@@ -151,6 +151,10 @@ hframes = 8
 [node name="ExplodeAnimation" type="AnimationPlayer" parent="Explosion" unique_id=1439508355]
 libraries/ = SubResource("AnimationLibrary_6vf5s")
 
+[node name="ExplosionFlash" type="PointLight2D" parent="Explosion" unique_id=953957371]
+visible = false
+texture = ExtResource("4_0tq5o")
+
 [node name="BackAndForthMover" type="BackAndForthMover" parent="." unique_id=1888124908]
 drive_owner = false
 going_to_b = false
