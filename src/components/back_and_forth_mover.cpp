@@ -13,6 +13,7 @@ using godot::PROPERTY_HINT_RANGE;
 using godot::PropertyInfo;
 using godot::UtilityFunctions;
 using godot::Variant;
+using godot::Vector2;
 
 void BackAndForthMover::_bind_methods() {
   ClassDB::bind_method(D_METHOD("set_speed", "s"), &BackAndForthMover::SetSpeed);
@@ -74,7 +75,7 @@ void BackAndForthMover::_ready() {
   }
 }
 
-godot::Vector2 BackAndForthMover::GetDirection(double delta) {
+Vector2 BackAndForthMover::GetDirection(double delta) {
   if (!active_ || !enabled_) return {};
 
   if (wait_left_ > 0.0) {
@@ -82,8 +83,8 @@ godot::Vector2 BackAndForthMover::GetDirection(double delta) {
     return {};
   }
 
-  const godot::Vector2 pos = body_->get_global_position();
-  const godot::Vector2 target = Target();
+  const Vector2 pos = body_->get_global_position();
+  const Vector2 target = Target();
   if (pos.distance_to(target) <= arrive_radius_) {
     going_to_b_ = !going_to_b_;
     wait_left_ = wait_time_;
@@ -96,8 +97,8 @@ godot::Vector2 BackAndForthMover::GetDirection(double delta) {
 void BackAndForthMover::_physics_process(double delta) {
   if (!drive_owner_ || !active_ || !enabled_) return;
 
-  const godot::Vector2 dir = GetDirection(delta);
-  if (dir == godot::Vector2()) return;
+  const Vector2 dir = GetDirection(delta);
+  if (dir == Vector2()) return;
 
   const godot::Vector2 pos = body_->get_global_position();
   const float step = std::min(speed_ * static_cast<float>(delta), pos.distance_to(Target()));
